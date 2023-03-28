@@ -1,7 +1,7 @@
 package com.dbj.shopcommon.constant;
 
 /**
- * @author wulang
+ * @author dbj
  */
 
 public enum ShopCode {

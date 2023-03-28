@@ -1,7 +1,7 @@
 package com.dbj.shopcommon.utils;
 
 /**
- * 模拟雪花算法snow
+ * 模拟雪花算法Twitter
  */
 public class IDWorker {
 

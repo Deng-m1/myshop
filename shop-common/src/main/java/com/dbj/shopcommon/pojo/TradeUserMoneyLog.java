@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class TradeUserMoneyLog extends com.wulang.shop.pojo.TradeUserMoneyLogKey implements Serializable {
+public class TradeUserMoneyLog extends com.dbj.shop.pojo.TradeUserMoneyLogKey implements Serializable {
     private BigDecimal useMoney;
 
     private Date createTime;
