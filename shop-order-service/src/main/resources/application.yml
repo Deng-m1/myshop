@@ -1,0 +1,30 @@
+spring:
+  rabbitmq:
+    addresses: 10.4.188.185:5672
+    username: guest
+    password: guest
+    virtual-host: /
+    publisher-returns: true
+    template:
+      mandatory: true
+    publisher-confirm-type: CORRELATED
+  datasource:
+    url: jdbc:mysql://localhost:3306/rabbitmq?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&tinyInt1isBit=false
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 100
+      max-active: 100
+server:
+  port: 8009
+  servlet:
+    context-path: /
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*.xml
+logging:
+  level:
+    tk:
+      mybatis: trace
+
