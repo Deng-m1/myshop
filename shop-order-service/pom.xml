@@ -24,7 +24,15 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.31</version>
         </dependency>
+        <dependency>
+            <groupId>com.dbj</groupId>
+            <artifactId>shop-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+
 
     </dependencies>
 

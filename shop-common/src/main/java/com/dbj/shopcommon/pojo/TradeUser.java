@@ -3,6 +3,12 @@ package com.dbj.shopcommon.pojo;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * 贸易用户
+ *
+ * @author admin
+ * @date 2023/03/28
+ */
 public class TradeUser implements Serializable {
     private Long userId;
 

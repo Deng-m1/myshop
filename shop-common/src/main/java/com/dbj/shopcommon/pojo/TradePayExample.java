@@ -5,6 +5,12 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 贸易支付例子
+ *
+ * @author admin
+ * @date 2023/03/28
+ */
 public class TradePayExample implements Serializable {
     protected String orderByClause;
 
