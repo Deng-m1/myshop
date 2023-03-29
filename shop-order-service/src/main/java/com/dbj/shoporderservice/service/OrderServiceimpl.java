@@ -15,6 +15,7 @@ import com.dbj.shopcommon.pojo.*;
 import com.dbj.shopcommon.utils.IDWorker;
 import com.dbj.shoporderservice.mapper.TradeOrderMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.message.Message;
@@ -28,13 +29,13 @@ import java.util.Date;
 
 @Slf4j
 public class OrderServiceimpl implements IOrderService {
-    @Reference
+    @DubboReference
     private IGoodsService goodsService;
 
-    @Reference
+    @DubboReference
     private IUserService userService;
 
-    @Reference
+    @DubboReference
     private ICouponService couponService;
 
 

@@ -21,6 +21,7 @@
         <module>shop-common</module>
         <module>shop-order-service</module>
         <module>shop-order-web</module>
+        <module>shop-user-service</module>
     </modules>
     <dependencies>
         <dependency>
@@ -38,9 +39,9 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.alibaba.spring.boot</groupId>
+            <groupId>org.apache.dubbo</groupId>
             <artifactId>dubbo-spring-boot-starter</artifactId>
-            <version>2.0.0</version>
+            <version>3.0.2</version>
         </dependency>
 
         <dependency>
@@ -62,6 +63,16 @@
             <groupId>org.apache.rocketmq</groupId>
             <artifactId>rocketmq-spring-boot-starter</artifactId>
             <version>2.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+            <version>3.4.10</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>1.2.8</version>
         </dependency>
     </dependencies>
 
