@@ -2,20 +2,24 @@ package com.dbj.shoporderservice.service;
 
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.alibaba.fastjson.JSON;
 import com.dbj.shopcommon.api.ICouponService;
 import com.dbj.shopcommon.api.IGoodsService;
 import com.dbj.shopcommon.api.IOrderService;
 import com.dbj.shopcommon.api.IUserService;
 import com.dbj.shopcommon.constant.ShopCode;
+import com.dbj.shopcommon.entity.MQEntity;
 import com.dbj.shopcommon.entity.Result;
 import com.dbj.shopcommon.exception.CastException;
-import com.dbj.shopcommon.pojo.TradeCoupon;
-import com.dbj.shopcommon.pojo.TradeGoods;
-import com.dbj.shopcommon.pojo.TradeOrder;
-import com.dbj.shopcommon.pojo.TradeUser;
+import com.dbj.shopcommon.pojo.*;
 import com.dbj.shopcommon.utils.IDWorker;
 import com.dbj.shoporderservice.mapper.TradeOrderMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.rocketmq.client.exception.MQBrokerException;
+import org.apache.rocketmq.client.exception.MQClientException;
+import org.apache.rocketmq.common.message.Message;
+import org.apache.rocketmq.remoting.exception.RemotingException;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -26,10 +30,14 @@ import java.util.Date;
 public class OrderServiceimpl implements IOrderService {
     @Reference
     private IGoodsService goodsService;
+
     @Reference
     private IUserService userService;
+
     @Reference
     private ICouponService couponService;
+
+
     @Value("${mq.order.topic}")
     private String topic;
 
@@ -41,18 +49,139 @@ public class OrderServiceimpl implements IOrderService {
 
     @Autowired
     private IDWorker idWorker;
+
+
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
+
     @Override
     public Result confirmOrder(TradeOrder order) {
+        //1.校验订单
         checkOrder(order);
-        Long orderId=savePreOrder(order);
-        return null;
+        //2.生成预订单
+        Long orderId = savePreOrder(order);
+        try {
+            //3.扣减库存
+            reduceGoodsNum(order);
+            //4.扣减优惠券
+            updateCouponStatus(order);
+            //5.使用余额
+            reduceMoneyPaid(order);
+
+            //模拟异常抛出
+            //CastException.cast(ShopCode.SHOP_FAIL);
+
+            //6.确认订单
+            updateOrderStatus(order);
+            //7.返回成功状态
+            return new Result(ShopCode.SHOP_SUCCESS.getSuccess(),ShopCode.SHOP_SUCCESS.getMessage());
+        } catch (Exception e) {
+            //1.确认订单失败,发送消息
+            MQEntity mqEntity = new MQEntity();
+            mqEntity.setOrderId(orderId);
+            mqEntity.setUserId(order.getUserId());
+            mqEntity.setUserMoney(order.getMoneyPaid());
+            mqEntity.setGoodsId(order.getGoodsId());
+            mqEntity.setGoodsNum(order.getGoodsNumber());
+            mqEntity.setCouponId(order.getCouponId());
+
+            //2.返回订单确认失败消息
+            try {
+                sendCancelOrder(topic,tag,order.getOrderId().toString(), JSON.toJSONString(mqEntity));
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+            return new Result(ShopCode.SHOP_FAIL.getSuccess(),ShopCode.SHOP_FAIL.getMessage());
+        }
+    }
+
+    /**
+     * 发送订单确认失败消息
+     * @param topic
+     * @param tag
+     * @param keys
+     * @param body
+     */
+    private void sendCancelOrder(String topic, String tag, String keys, String body) throws InterruptedException, RemotingException, MQClientException, MQBrokerException {
+        Message message = new Message(topic,tag,keys,body.getBytes());
+        rocketMQTemplate.getProducer().send(message);
+    }
+
+    /**
+     * 确认订单
+     * @param order
+     */
+    private void updateOrderStatus(TradeOrder order) {
+        order.setOrderStatus(ShopCode.SHOP_ORDER_CONFIRM.getCode());
+        order.setPayStatus(ShopCode.SHOP_ORDER_PAY_STATUS_NO_PAY.getCode());
+        order.setConfirmTime(new Date());
+        int r = orderMapper.updateByPrimaryKey(order);
+        if(r<=0){
+            CastException.cast(ShopCode.SHOP_ORDER_CONFIRM_FAIL);
+        }
+        log.info("订单:"+order.getOrderId()+"确认订单成功");
+    }
+
+    /**
+     * 扣减余额
+     * @param order
+     */
+    private void reduceMoneyPaid(TradeOrder order) {
+        if(order.getMoneyPaid()!=null && order.getMoneyPaid().compareTo(BigDecimal.ZERO)==1){
+            TradeUserMoneyLog userMoneyLog = new TradeUserMoneyLog();
+            userMoneyLog.setOrderId(order.getOrderId());
+            userMoneyLog.setUserId(order.getUserId());
+            userMoneyLog.setUseMoney(order.getMoneyPaid());
+            userMoneyLog.setMoneyLogType(ShopCode.SHOP_USER_MONEY_PAID.getCode());
+            Result result = userService.updateMoneyPaid(userMoneyLog);
+            if(result.getSuccess().equals(ShopCode.SHOP_FAIL.getSuccess())){
+                CastException.cast(ShopCode.SHOP_USER_MONEY_REDUCE_FAIL);
+            }
+            log.info("订单:"+order.getOrderId()+",扣减余额成功");
+        }
+    }
+
+    /**
+     * 使用优惠券
+     * @param order
+     */
+    private void updateCouponStatus(TradeOrder order) {
+        if(order.getCouponId()!=null){
+            TradeCoupon coupon = couponService.findOne(order.getCouponId());
+            coupon.setOrderId(order.getOrderId());
+            coupon.setIsUsed(ShopCode.SHOP_COUPON_ISUSED.getCode());
+            coupon.setUsedTime(new Date());
+
+            //更新优惠券状态
+            Result result =  couponService.updateCouponStatus(coupon);
+            if(result.getSuccess().equals(ShopCode.SHOP_FAIL.getSuccess())){
+                CastException.cast(ShopCode.SHOP_COUPON_USE_FAIL);
+            }
+            log.info("订单:"+order.getOrderId()+",使用优惠券");
+        }
+    }
+
+    /**
+     * 扣减库存
+     * @param order
+     */
+    private void reduceGoodsNum(TradeOrder order) {
+        TradeGoodsNumberLog goodsNumberLog = new TradeGoodsNumberLog();
+        goodsNumberLog.setOrderId(order.getOrderId());
+        goodsNumberLog.setGoodsId(order.getGoodsId());
+        goodsNumberLog.setGoodsNumber(order.getGoodsNumber());
+        Result result = goodsService.reduceGoodsNum(goodsNumberLog);
+        if(result.getSuccess().equals(ShopCode.SHOP_FAIL.getSuccess())){
+            CastException.cast(ShopCode.SHOP_REDUCE_GOODS_NUM_FAIL);
+        }
+        log.info("订单:"+order.getOrderId()+"扣减库存成功");
     }
 
     /**
      * 生成预订单
      *
-     * @param order 订单
-     * @return {@link Long}
+     * @param order
+     * @return
      */
     private Long savePreOrder(TradeOrder order) {
         //1. 设置订单状态为不可见
@@ -124,36 +253,32 @@ public class OrderServiceimpl implements IOrderService {
     }
 
     /**
-     * 计算运费
-     *
-     * @param orderAmount 订单数量
-     * @return {@link BigDecimal}
+     * 核算运费
+     * @param orderAmount
+     * @return
      */
-    private BigDecimal calculateShippingFee(BigDecimal orderAmount)
-    {
-        if (orderAmount.compareTo(BigDecimal.valueOf(100))==1)
-        {
+    private BigDecimal calculateShippingFee(BigDecimal orderAmount) {
+        if(orderAmount.compareTo(new BigDecimal(100))==1){
             return BigDecimal.ZERO;
-        }
-        else {
-            return new BigDecimal(12);
+        }else{
+            return new BigDecimal(10);
         }
     }
+
+
     /**
      * 校验订单
      *
      * @param order
      */
     private void checkOrder(TradeOrder order) {
-        //to check the order is exist
-        if (order==null)
-        {
-            CastException.cast(ShopCode.SHOP_COUPON_INVALIED);
+        //1.校验订单是否存在
+        if (order == null) {
+            CastException.cast(ShopCode.SHOP_ORDER_INVALID);
         }
-        //to check the product of the order is exist
+        //2.校验订单中的商品是否存在
         TradeGoods goods = goodsService.findOne(order.getGoodsId());
-        if (goods==null)
-        {
+        if (goods == null) {
             CastException.cast(ShopCode.SHOP_GOODS_NO_EXIST);
         }
         //3.校验下单用户是否存在
