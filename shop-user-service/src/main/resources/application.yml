@@ -8,6 +8,8 @@ spring:
     druid:
       initial-size: 100
       max-active: 100
+  application:
+    name: user-service
 
 
 server:
