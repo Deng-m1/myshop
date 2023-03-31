@@ -8,10 +8,10 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <packaging>jar</packaging>
-    <artifactId>shop-coupon-service</artifactId>
+    <artifactId>shop-pay-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>shop-coupon-service</name>
-    <description>shop-coupon-service</description>
+    <name>shop-pay-service</name>
+    <description>shop-pay-service</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>

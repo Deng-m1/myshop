@@ -1,10 +1,10 @@
-package com.dbj.shoporderweb.controller;
+package com.dbj.shoppayweb.controller;
 
-import com.alibaba.dubbo.config.annotation.Reference;
+
+
 import com.dbj.shopcommon.api.IOrderService;
 import com.dbj.shopcommon.entity.Result;
 import com.dbj.shopcommon.pojo.TradeOrder;
-
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

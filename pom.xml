@@ -24,6 +24,8 @@
         <module>shop-user-service</module>
         <module>shop-coupon-service</module>
         <module>shop-goods-service</module>
+        <module>shop-pay-service</module>
+        <module>shop-pay-web</module>
     </modules>
     <dependencies>
         <dependency>

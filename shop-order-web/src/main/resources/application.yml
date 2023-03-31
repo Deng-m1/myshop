@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: user-web
+
+server:
+  port: 8049
+  servlet:
+    context-path: /
+
+logging:
+  level:
+    tk:
+      mybatis: trace
+
+rocketmq:
+  name-server: 10.4.188.185:9876;
+  producer:
+    group: orderProducerGroup
+dubbo:
+  application:
+    name: dubbo-user-provider
+    id: dubbo-order-consumer
+  registry:
+    address: zookeeper://10.4.188.185:2181
