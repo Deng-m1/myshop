@@ -9,11 +9,11 @@ spring:
       initial-size: 100
       max-active: 100
   application:
-    name: user-service
+    name: goods-service
 
 
 server:
-  port: 8039
+  port: 8069
   servlet:
     context-path: /
 mybatis-plus:
@@ -29,7 +29,7 @@ rocketmq:
     group: orderProducerGroup
 dubbo:
   application:
-    name: dubbo-order-provider
-    id: dubbo-order-provider
+    name: dubbo-goods-provider
+    id: dubbo-goods-provider
   registry:
-    address: zookeeper://10.4.188.185:2181
+    address: 10.4.188.185:2181

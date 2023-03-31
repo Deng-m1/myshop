@@ -13,7 +13,7 @@ spring:
 
 
 server:
-  port: 8039
+  port: 8059
   servlet:
     context-path: /
 mybatis-plus:
@@ -29,7 +29,7 @@ rocketmq:
     group: orderProducerGroup
 dubbo:
   application:
-    name: dubbo-order-provider
-    id: dubbo-order-provider
+    name: dubbo-coupon-provider
+    id: dubbo-coupon-provider
   registry:
-    address: zookeeper://10.4.188.185:2181
+    address: 10.4.188.185:2181
