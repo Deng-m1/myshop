@@ -1,4 +1,4 @@
-package com.dbj.shopgoodsservice.impl;
+package com.dbj.shoporderservice.impl;
 
 
 import com.alibaba.dubbo.config.annotation.Service;
@@ -9,8 +9,8 @@ import com.dbj.shopcommon.exception.CastException;
 import com.dbj.shopcommon.pojo.TradeGoods;
 import com.dbj.shopcommon.pojo.TradeGoodsNumberLog;
 
-import com.dbj.shopgoodsservice.mapper.TradeGoodsMapper;
-import com.dbj.shopgoodsservice.mapper.TradeGoodsNumberLogMapper;
+import com.dbj.shoporderservice.mapper.TradeGoodsMapper;
+import com.dbj.shoporderservice.mapper.TradeGoodsNumberLogMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +21,7 @@ import java.util.Date;
  * @create 2019/12/27/10:02
  */
 @Component
-@Service(interfaceClass = IGoodsService.class)
+@Service
 public class GoodsServiceImpl implements IGoodsService {
 
     @Autowired

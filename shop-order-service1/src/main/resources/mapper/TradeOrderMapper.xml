@@ -86,7 +86,7 @@
     goods_id, goods_number, goods_price, goods_amount, shipping_fee, order_amount, coupon_id, 
     coupon_paid, money_paid, pay_amount, add_time, confirm_time, pay_time
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wulang.shop.pojo.TradeOrderExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.dbj.shopcommon.pojo.TradeOrderExample" >
     select
     <if test="distinct" >
       distinct
@@ -110,13 +110,13 @@
     delete from trade_order
     where order_id = #{orderId,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.wulang.shop.pojo.TradeOrderExample" >
+  <delete id="deleteByExample" parameterType="com.dbj.shopcommon.pojo.TradeOrderExample" >
     delete from trade_order
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.wulang.shop.pojo.TradeOrder" >
+  <insert id="insert" parameterType="com.dbj.shopcommon.pojo.TradeOrder" >
     insert into trade_order (order_id, user_id, order_status, 
       pay_status, shipping_status, address, 
       consignee, goods_id, goods_number, 
@@ -132,7 +132,7 @@
       #{moneyPaid,jdbcType=DECIMAL}, #{payAmount,jdbcType=DECIMAL}, #{addTime,jdbcType=TIMESTAMP}, 
       #{confirmTime,jdbcType=TIMESTAMP}, #{payTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.wulang.shop.pojo.TradeOrder" >
+  <insert id="insertSelective" parameterType="com.dbj.shopcommon.pojo.TradeOrder" >
     insert into trade_order
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="orderId != null" >
@@ -259,7 +259,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.wulang.shop.pojo.TradeOrderExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.dbj.shopcommon.pojo.TradeOrderExample" resultType="java.lang.Integer" >
     select count(*) from trade_order
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -359,7 +359,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wulang.shop.pojo.TradeOrder" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.dbj.shopcommon.pojo.TradeOrder" >
     update trade_order
     <set >
       <if test="userId != null" >
@@ -422,7 +422,7 @@
     </set>
     where order_id = #{orderId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.wulang.shop.pojo.TradeOrder" >
+  <update id="updateByPrimaryKey" parameterType="com.dbj.shopcommon.pojo.TradeOrder" >
     update trade_order
     set user_id = #{userId,jdbcType=BIGINT},
       order_status = #{orderStatus,jdbcType=INTEGER},

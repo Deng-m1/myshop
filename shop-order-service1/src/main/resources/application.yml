@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/myshop?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&tinyInt1isBit=false
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 100
+      max-active: 100
+  application:
+    name: user-service
+
+
+server:
+  port: 8039
+  servlet:
+    context-path: /
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*.xml
+logging:
+  level:
+    tk:
+      mybatis: trace
+
+rocketmq:
+  name-server: 10.4.188.185:9876;
+  producer:
+    group: orderProducerGroup

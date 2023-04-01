@@ -1,7 +1,7 @@
-package com.dbj.shoporderservice.service;
-
+package com.dbj.shoporderservice.impl;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
 import com.dbj.shopcommon.api.ICouponService;
 import com.dbj.shopcommon.api.IGoodsService;
@@ -15,7 +15,6 @@ import com.dbj.shopcommon.pojo.*;
 import com.dbj.shopcommon.utils.IDWorker;
 import com.dbj.shoporderservice.mapper.TradeOrderMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.message.Message;
@@ -28,14 +27,15 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Slf4j
-public class OrderServiceimpl implements IOrderService {
-    @DubboReference
+@Service(interfaceClass = IOrderService.class)
+public class OrderServiceImpl implements IOrderService {
+    @Reference
     private IGoodsService goodsService;
 
-    @DubboReference
+    @Reference
     private IUserService userService;
 
-    @DubboReference
+    @Reference
     private ICouponService couponService;
 
 
@@ -94,6 +94,11 @@ public class OrderServiceimpl implements IOrderService {
             }
             return new Result(ShopCode.SHOP_FAIL.getSuccess(),ShopCode.SHOP_FAIL.getMessage());
         }
+    }
+
+    @Override
+    public void testDubbo() {
+        System.out.println("收到");
     }
 
     /**

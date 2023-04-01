@@ -1,4 +1,4 @@
-package com.dbj.shopgoodsservice.mq;
+package com.dbj.shoporderservice.mq;
 
 import com.alibaba.fastjson.JSON;
 import com.dbj.shopcommon.constant.ShopCode;
@@ -7,9 +7,9 @@ import com.dbj.shopcommon.pojo.TradeGoods;
 import com.dbj.shopcommon.pojo.TradeMqConsumerLog;
 import com.dbj.shopcommon.pojo.TradeMqConsumerLogExample;
 import com.dbj.shopcommon.pojo.TradeMqConsumerLogKey;
-import com.dbj.shopgoodsservice.mapper.TradeGoodsMapper;
-import com.dbj.shopgoodsservice.mapper.TradeGoodsNumberLogMapper;
-import com.dbj.shopgoodsservice.mapper.TradeMqConsumerLogMapper;
+import com.dbj.shoporderservice.mapper.TradeGoodsMapper;
+import com.dbj.shoporderservice.mapper.TradeGoodsNumberLogMapper;
+import com.dbj.shoporderservice.mapper.TradeMqConsumerLogMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.apache.rocketmq.spring.annotation.MessageModel;

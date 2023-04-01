@@ -5,7 +5,6 @@ import com.dbj.shopcommon.api.IOrderService;
 import com.dbj.shopcommon.entity.Result;
 import com.dbj.shopcommon.pojo.TradeOrder;
 
-import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,12 +17,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/order")
 public class OrderControllre {
 
-    @DubboReference
+    @Reference
     private IOrderService orderService;
 
     @RequestMapping("/confirm")
     public Result confirmOrder(@RequestBody TradeOrder order){
         return orderService.confirmOrder(order);
+    }
+
+    @RequestMapping("/ni")
+    public Result text(){
+        String s=orderService.testDubbo();
+        System.out.println(s);
+        return new Result();
     }
 
 }

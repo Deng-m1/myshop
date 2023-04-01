@@ -1,4 +1,10 @@
 spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/myshop?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&tinyInt1isBit=false
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
   application:
     name: user-web
 
@@ -16,9 +22,4 @@ rocketmq:
   name-server: 10.4.188.185:9876;
   producer:
     group: orderProducerGroup
-dubbo:
-  application:
-    name: dubbo-user-provider
-    id: dubbo-order-consumer
-  registry:
-    address: zookeeper://10.4.188.185:2181
+

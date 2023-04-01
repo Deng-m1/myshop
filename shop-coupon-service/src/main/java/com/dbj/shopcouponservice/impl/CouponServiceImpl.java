@@ -8,7 +8,6 @@ import com.dbj.shopcommon.exception.CastException;
 
 import com.dbj.shopcommon.pojo.TradeCoupon;
 import com.dbj.shopcouponservice.mapper.TradeCouponMapper;
-import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +18,7 @@ import org.springframework.stereotype.Component;
  * @create 2019/12/27/11:18
  */
 @Component
-@DubboService(interfaceClass = ICouponService.class)
+@Service(interfaceClass = ICouponService.class)
 public class CouponServiceImpl implements ICouponService{
 
     @Autowired

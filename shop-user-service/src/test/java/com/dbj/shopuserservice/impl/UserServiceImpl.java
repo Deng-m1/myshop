@@ -11,7 +11,6 @@ import com.dbj.shopuserservice.mapper.TradeUserMoneyLogMapper;
 import com.dbj.shopcommon.pojo.TradeUser;
 import com.dbj.shopcommon.pojo.TradeUserMoneyLog;
 import com.dbj.shopcommon.pojo.TradeUserMoneyLogExample;
-import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +22,7 @@ import java.util.Date;
  * @create 2019/12/27/11:32
  */
 @Component
-@DubboService(interfaceClass = IUserService.class)
+@Service(interfaceClass = IUserService.class)
 public class UserServiceImpl implements IUserService{
 
     @Autowired

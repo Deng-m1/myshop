@@ -1,4 +1,4 @@
-package com.dbj.shopgoodsservice.mapper;
+package com.dbj.shoporderservice.mapper;
 
 import com.dbj.shopcommon.pojo.TradeMqConsumerLog;
 import com.dbj.shopcommon.pojo.TradeMqConsumerLogExample;

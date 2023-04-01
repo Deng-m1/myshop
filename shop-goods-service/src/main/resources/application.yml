@@ -6,14 +6,14 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
-      initial-size: 100
+      initial-size: 10
       max-active: 100
   application:
     name: goods-service
 
 
 server:
-  port: 8069
+  port: 8078
   servlet:
     context-path: /
 mybatis-plus:
@@ -27,9 +27,3 @@ rocketmq:
   name-server: 10.4.188.185:9876;
   producer:
     group: orderProducerGroup
-dubbo:
-  application:
-    name: dubbo-goods-provider
-    id: dubbo-goods-provider
-  registry:
-    address: 10.4.188.185:2181

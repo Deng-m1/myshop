@@ -15,4 +15,6 @@ public interface IOrderService {
      * @return Result
      */
     Result confirmOrder(TradeOrder order);
+
+    String testDubbo();
 }
