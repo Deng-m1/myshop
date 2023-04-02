@@ -21,7 +21,7 @@ import java.util.Date;
  * @create 2019/12/27/11:32
  */
 @Component
-@Service(interfaceClass = IUserService.class)
+@Service
 public class UserServiceImpl implements IUserService{
 
     @Autowired

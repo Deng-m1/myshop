@@ -107,7 +107,7 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public String testDubbo() {
         System.out.println("nihao");
-        return "nihao";
+        return "nano";
 
     }
 
