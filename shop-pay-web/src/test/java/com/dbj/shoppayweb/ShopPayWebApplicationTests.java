@@ -39,7 +39,8 @@ class ShopPayWebApplicationTests {
 
     @Test
     public void callBackPayment(){
-        long payId = 352542415984402432L;
+        //payId要根据自己数据库来看
+        long payId = 839943432024760320L;
         long orderId = 352537369385242624L;
 
         TradePay tradePay = new TradePay();
