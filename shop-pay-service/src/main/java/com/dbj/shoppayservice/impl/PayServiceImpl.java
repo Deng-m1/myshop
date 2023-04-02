@@ -13,7 +13,6 @@ import com.dbj.shopcommon.utils.IDWorker;
 import com.dbj.shoppayservice.mapper.TradeMqProducerTempMapper;
 import com.dbj.shoppayservice.mapper.TradePayMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.dubbo.config.annotation.DubboService;
 import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.SendResult;
@@ -30,12 +29,12 @@ import org.springframework.util.StringUtils;
 import java.util.Date;
 
 /**
- * @author wulang
+ * @author dbj
  * @create 2019/12/27/15:58
  */
 @Slf4j
 @Component
-@DubboService(interfaceClass = IPayService.class)
+@Service(interfaceClass = IPayService.class)
 public class PayServiceImpl implements IPayService{
 
     @Autowired

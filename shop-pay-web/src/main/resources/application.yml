@@ -6,30 +6,18 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
-      initial-size: 10
+      initial-size: 0
       max-active: 100
   application:
-    name: goods-service
-  redis:
-    host: 10.4.188.185
-    port: 6379
-    #    password: root
-    lettuce:
-      pool:
-        max-active: 50
-        max-idle: 20
-        min-idle: 10
-        max-wait: 100ms
+    name: pay-WEB
 
 
 server:
-  port: 8078
+  port: 8109
   servlet:
     context-path: /
 mybatis-plus:
   mapper-locations: classpath:/mapper/*.xml
-  configuration:
-    lazy-loading-enabled: true
 logging:
   level:
     tk:
@@ -38,4 +26,4 @@ logging:
 rocketmq:
   name-server: 10.4.188.185:9876;
   producer:
-    group: orderProducerGroup
+    group: payProducerGroup

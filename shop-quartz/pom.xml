@@ -7,33 +7,19 @@
         <groupId>com.dbj</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <packaging>jar</packaging>
-    <artifactId>shop-order-service</artifactId>
+    <artifactId>shop-quartz</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>shop-order-service</name>
-    <description>shop-order-service</description>
+    <name>shop-quartz</name>
+    <description>shop-quartz</description>
     <properties>
+        <java.version>8</java.version>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.5.1</version>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+            <version>2.3.2</version>
         </dependency>
-        <!-- MySQL连接驱动 -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.31</version>
-        </dependency>
-        <dependency>
-            <groupId>com.dbj</groupId>
-            <artifactId>shop-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
-
-
     </dependencies>
 
     <build>

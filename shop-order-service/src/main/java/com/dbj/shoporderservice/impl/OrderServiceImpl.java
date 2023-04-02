@@ -1,5 +1,6 @@
 package com.dbj.shoporderservice.impl;
 
+import ch.qos.logback.core.util.TimeUtil;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
@@ -17,6 +18,7 @@ import com.dbj.shoporderservice.mapper.TradeOrderMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
+import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
@@ -25,10 +27,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * @author wulang
+ * @author dbj
  * @create 2019/12/27/9:54
  */
 @Slf4j
@@ -83,6 +87,7 @@ public class OrderServiceImpl implements IOrderService {
             //6.确认订单
             updateOrderStatus(order);
             //7.返回成功状态
+            checkCloseOrder(order.getOrderId());
             return new Result(ShopCode.SHOP_SUCCESS.getSuccess(),ShopCode.SHOP_SUCCESS.getMessage());
         } catch (Exception e) {
             //1.确认订单失败,发送消息
@@ -102,6 +107,25 @@ public class OrderServiceImpl implements IOrderService {
             }
             return new Result(ShopCode.SHOP_FAIL.getSuccess(),ShopCode.SHOP_FAIL.getMessage());
         }
+    }
+
+    private void checkCloseOrder(Long orderId) throws MQBrokerException, RemotingException, InterruptedException, MQClientException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh-mm-ss");
+        Date date = new Date(System.currentTimeMillis());
+
+        String nowTime = sdf.format(date);
+        MQEntity mqEntity=new MQEntity();
+        mqEntity.setOrderId(orderId);
+        String msgJson= JSON.toJSONString(mqEntity);
+
+        Message message = new Message("delay","check-close"
+                ,orderId.toString()
+                ,msgJson.getBytes(StandardCharsets.UTF_8));
+        message.setDelayTimeLevel(5);
+
+        SendResult sendResult = rocketMQTemplate.getProducer().send(message);
+        System.out.println("时间:"+ nowTime+";生产者发送一条信息，内容:{"+msgJson+"},结果:{"+sendResult+"}");
+
     }
 
     @Override

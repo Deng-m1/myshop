@@ -26,6 +26,7 @@
         <module>shop-goods-service</module>
         <module>shop-pay-service</module>
         <module>shop-pay-web</module>
+        <module>shop-quartz</module>
     </modules>
     <dependencies>
         <dependency>
